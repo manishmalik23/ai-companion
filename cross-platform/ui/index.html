@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Pip Source</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+  <section id="card" hidden aria-label="Assistant request">
+    <header class="session-header"><button id="session-title" class="session-title" disabled></button><p id="session-context"></p></header>
+    <div class="request-scroll">
+      <div class="eyebrow"><span id="provider"></span><span id="count"></span></div>
+      <h1 id="tool"></h1>
+      <div id="reason-section"><h2 class="section-label">Why this is needed</h2><p id="reason"></p></div>
+      <p id="action-summary" class="action-summary"></p>
+      <pre id="details"></pre>
+      <form id="question-form" hidden></form>
+      <p id="instructions" class="instructions"></p>
+      <p id="workspace" class="workspace"></p>
+    </div>
+    <p id="error" role="alert"></p>
+    <div id="permission-actions" class="actions"><button id="deny">No, reject</button><button id="allow" class="primary">Yes, allow once</button></div>
+    <div id="question-actions" class="actions" hidden><button id="defer">Answer in source</button><button id="submit-answer" class="primary" type="submit" form="question-form">Send answer</button></div>
+    <div id="notice-actions" class="actions" hidden><button id="dismiss">Dismiss alert</button></div>
+    <nav class="pager" aria-label="Pending requests"><button id="previous" aria-label="Previous request">‹</button><span id="position"></span><button id="next" aria-label="Next request">›</button></nav>
+  </section>
+  <section id="appearance-panel" hidden aria-label="Appearance">
+    <header class="appearance-heading"><h1>Appearance</h1><button id="appearance-close" aria-label="Close appearance">×</button></header>
+    <div class="appearance-scroll">
+      <p class="muted">Choose a companion and preview its idle, working, and waiting states.</p>
+      <div id="appearance-grid" class="character-grid" role="radiogroup" aria-label="Built-in characters"></div>
+      <div class="character-preview"><canvas id="appearance-preview" width="192" height="208" aria-label="Character preview"></canvas><div><p id="appearance-current"></p><div class="preview-modes"><button id="preview-idle" aria-pressed="true">Idle</button><button id="preview-working" aria-pressed="false">Working</button><button id="preview-waiting" aria-pressed="false">Waiting</button></div></div></div>
+      <div class="actions"><button id="reset-character">Reset to default</button><button id="apply-character" class="primary">Use character</button></div>
+      <h2 class="section-label import-label">Or use your own image</h2>
+      <div class="actions"><button id="import-still">Import still image…</button><button id="import-sprite">Import animated sheet…</button></div>
+      <p class="muted import-help">PNG or WebP, up to 10 MB. Animated sheets use Pip’s supported frame layout.</p>
+      <p id="appearance-error" role="alert"></p>
+      <button id="quit" class="quit">Quit Pip Source</button>
+    </div>
+  </section>
+  <div id="pet" aria-label="Pip character. Drag to move."><canvas id="robot" width="384" height="416"></canvas></div>
+  <div id="handle" tabindex="0" aria-label="Companion controls"><div class="line"></div><div class="controls"><button id="claude" aria-label="Open Claude">Claude</button><button id="chatgpt" aria-label="Open ChatGPT">ChatGPT</button><button id="appearance-open" aria-label="Change appearance">Appearance</button></div><span id="status" class="sr-only">Pip Source · Idle</span><span id="launch-status" role="status"></span></div>
+</main><script src="renderer.js"></script></body></html>

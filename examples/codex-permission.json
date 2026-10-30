@@ -1,0 +1,11 @@
+{
+  "session_id": "demo-codex-session",
+  "turn_id": "demo-turn",
+  "cwd": "/private/tmp/agent-companion",
+  "hook_event_name": "PermissionRequest",
+  "tool_name": "exec_command",
+  "tool_input": {
+    "cmd": "npm test",
+    "justification": "Run the project's test suite?"
+  }
+}

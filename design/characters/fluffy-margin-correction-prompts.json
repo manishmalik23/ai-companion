@@ -1,0 +1,21 @@
+{
+  "generator": "built-in image_gen",
+  "created": "2026-10-30",
+  "transparent_background": true,
+  "specs": [
+    {
+      "key": "lavender-mochi",
+      "name": "Lavender Mochi",
+      "asset": "desktop/Resources/Characters/LavenderMochi.png",
+      "prompt": "Edit target: the supplied 12-frame transparent animation atlas. Make a production-safe version by REDUCING THE FIGURES inside their cells and increasing clear transparent margins. Preserve the character's exact design, fur colour, face, appendages, tuft, laptop and expressions. Keep the entire 4-column x 3-row layout, all 12 frames in the SAME order: top idle open/halfclosed/closed/open; middle seated laptop four small typing/blink variations; bottom attentive/open/headlift/closed/open four phases. There must still be exactly FOUR figures per row.\nOutput a square 1254 x 1254 transparent PNG atlas. Each equal cell is about313.5px wide and418px high. CRITICAL: the ENTIRE character INCLUDING ears, tuft, feet, antenna if any, and laptop must fit in a maximum225px-wide x300px-high area INSIDE EACH CELL, with at least40px fully transparent clearance on each left/right side and at least50px on top/bottom. Put ALL twelve character/laptop bottoms at the same cell-local baseline y=360px. Center each figure horizontally at cell-local x=156px. Make the renderings smaller than in the input, never larger. No cut-off ears/feet, overlapping cells, fragments at other cell edges, grid lines, labels, text, scenery, floor or cast shadows. Preserve true alpha transparency and soft fur edges, no white matte/checkerboard background.\nThe only creative change is frame placement/scale for spacing and uniform baseline. Preserve existing character identity, poses and animation sequence; do not invent a new mascot or accessories. Laptop appears ONLY in the middle row. Every frame front-facing, consistent proportions/camera/lighting. Keep gentle expressions and subtle paw movement, no walking, sideways translation or body rotation.",
+      "reference": "Earlier original 12-frame atlas for this Pip character; retained by the maintainer."
+    },
+    {
+      "key": "mint-bean",
+      "name": "Mint Bean",
+      "asset": "desktop/Resources/Characters/MintBean.png",
+      "prompt": "Edit target: the supplied 12-frame transparent animation atlas. Make a production-safe version by REDUCING THE FIGURES inside their cells and increasing clear transparent margins. Preserve the character's exact design, fur colour, face, appendages, tuft, laptop and expressions. Keep the entire 4-column x 3-row layout, all 12 frames in the SAME order: top idle open/halfclosed/closed/open; middle seated laptop four small typing/blink variations; bottom attentive/open/headlift/closed/open four phases. There must still be exactly FOUR figures per row.\nOutput a square 1254 x 1254 transparent PNG atlas. Each equal cell is about313.5px wide and418px high. CRITICAL: the ENTIRE character INCLUDING ears, tuft, feet, antenna if any, and laptop must fit in a maximum225px-wide x300px-high area INSIDE EACH CELL, with at least40px fully transparent clearance on each left/right side and at least50px on top/bottom. Put ALL twelve character/laptop bottoms at the same cell-local baseline y=360px. Center each figure horizontally at cell-local x=156px. Make the renderings smaller than in the input, never larger. No cut-off ears/feet, overlapping cells, fragments at other cell edges, grid lines, labels, text, scenery, floor or cast shadows. Preserve true alpha transparency and soft fur edges, no white matte/checkerboard background.\nThe only creative change is frame placement/scale for spacing and uniform baseline. Preserve existing character identity, poses and animation sequence; do not invent a new mascot or accessories. Laptop appears ONLY in the middle row. Every frame front-facing, consistent proportions/camera/lighting. Keep gentle expressions and subtle paw movement, no walking, sideways translation or body rotation.",
+      "reference": "Earlier original 12-frame atlas for this Pip character; retained by the maintainer."
+    }
+  ]
+}

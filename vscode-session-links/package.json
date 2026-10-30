@@ -1,0 +1,30 @@
+{
+  "name": "pip-session-links",
+  "displayName": "Pip Session Links",
+  "description": "Local, window-specific links from Pip back to Claude Code, supported Codex sessions, and existing VS Code terminals.",
+  "version": "0.3.0",
+  "publisher": "pip-local",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "vscode": "^1.95.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished", "onUri"],
+  "main": "./dist/src/extension.js",
+  "extensionKind": ["ui"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "yarn build && node --test dist/test/*.test.js",
+    "package": "yarn build && node scripts/package.mjs"
+  },
+  "contributes": {
+    "commands": [
+      { "command": "pipSessionLinks.refresh", "title": "Pip: Refresh Session Links" }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "22.18.6",
+    "@types/vscode": "1.95.0",
+    "typescript": "5.9.3"
+  },
+  "packageManager": "yarn@1.22.22"
+}

@@ -1,0 +1,11 @@
+{
+  "session_id": "demo-claude-session",
+  "cwd": "/private/tmp/agent-companion",
+  "permission_mode": "default",
+  "hook_event_name": "PermissionRequest",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "npm test",
+    "description": "Run the project's test suite"
+  }
+}

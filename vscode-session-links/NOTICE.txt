@@ -1,0 +1,4 @@
+Pip Session Links is part of the private Pip repository.
+
+This package has not been published to the VS Code Marketplace. Refer to the
+repository owner for permission to distribute or publish it.

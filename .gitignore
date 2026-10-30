@@ -1,0 +1,12 @@
+# Local runtime, chat data, installation plans, and generated artifacts
+.runtime/
+.build/
+.install-plan.json
+dist/
+*.zip
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Bundled OpenAI artwork: redistribution permission has not been verified.
+/desktop/Resources/CodexSpriteSheet.webp
