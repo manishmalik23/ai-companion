@@ -27,5 +27,7 @@ pushes and branch deletion disabled. Private-repository branch protection requir
 GitHub Pro, Team or Enterprise. See
 [GitHub's documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
 
-CI is not configured for Pip. Contributors currently run
-`./scripts/check.sh` from the repository root and include results in their PR.
+The GitHub Actions workflow `.github/workflows/pip-session-links.yml` runs the VS Code helper and
+TypeScript app checks on Windows and macOS, plus the native Mac checks on macOS, for pull requests
+that touch those areas. Contributors also run `./scripts/check.sh` from the repository root and
+include results in their PR.

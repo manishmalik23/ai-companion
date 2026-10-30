@@ -1,14 +1,29 @@
-# Pip — AI Companion for macOS
+# Pip — AI Companion for macOS and Windows
 
 For development setup, code layout, validation and pull requests, see
 [CONTRIBUTING.md](CONTRIBUTING.md). The private-beta verification record is in
 [RELEASE_CHECKS.md](RELEASE_CHECKS.md).
 
-A local macOS companion: an original blue Pip robot floats directly on the desktop, with a small rounded line just beneath its feet. Hover over the line to reveal **Claude**, **ChatGPT** and **Mini Chat**. Move away to collapse them back to the line. Claude and ChatGPT open their corresponding installed desktop apps; if an app is unavailable, Pip opens mini-chat with that provider selected. **Mini Chat** opens Pip's own chat directly, with a **Claude Code** or **Codex CLI** provider picker. Drag the robot to move it. When an AI agent needs permission, Pip shows the requesting agent and action with **Yes, allow once** and **No, reject** buttons. Claude's structured questions have answer forms.
+**Platform support**
+
+| | macOS | Windows |
+| --- | --- | --- |
+| App | Native Swift/AppKit app | TypeScript/Electron app ([Pip Source](cross-platform/README.md)) |
+| Install | [Prebuilt Apple silicon DMG](#install-a-prebuilt-mac-download) or [build from source](#build-a-local-mac-installer) | [Run from source](#typescript-source-for-macos-and-windows) with Node.js 24 and Yarn 1.22.22; no installer or `.exe` |
+| Status | Private beta; ad-hoc signed, not notarized | Alpha; desktop interaction and live chat navigation still need manual acceptance |
+| Mini Chat and desktop chat reading | Yes | Not available in this alpha |
+| VS Code session links | Yes | Yes, for local native Windows VS Code windows (WSL, SSH and dev containers are not supported) |
+
+Pip Source also runs on macOS from source, but the native Mac app remains the
+recommended Mac installation.
+
+A local desktop companion for macOS and Windows. The next paragraphs describe the native Mac app; the Windows app is covered under [TypeScript source for macOS and Windows](#typescript-source-for-macos-and-windows).
+
+An original blue Pip robot floats directly on the desktop, with a small rounded line just beneath its feet. Hover over the line to reveal **Claude**, **ChatGPT** and **Mini Chat**. Move away to collapse them back to the line. Claude and ChatGPT open their corresponding installed desktop apps; if an app is unavailable, Pip opens mini-chat with that provider selected. **Mini Chat** opens Pip's own chat directly, with a **Claude Code** or **Codex CLI** provider picker. Drag the robot to move it. When an AI agent needs permission, Pip shows the requesting agent and action with **Yes, allow once** and **No, reject** buttons. Claude's structured questions have answer forms.
 
 Pip follows the macOS light or dark appearance automatically. The rounded handle uses a pale system control color in light mode and system gray in dark mode, with a subtle border. The handle, controls, permission cards, question forms, and mini-chat update when the appearance changes.
 
-The pet is a native Swift/AppKit app. A Python bridge receives supported agent hook events and exchanges request and response files with the app in a private local directory. Claude's permission decisions also reach an authenticated receiver bound only to `127.0.0.1`. Pip keeps only the call identifiers, decision, and timing needed to remove the matching card; it does not retain the telemetry payload. There is no cloud service or new API key. The companion never executes the command being reviewed; it returns a decision to the originating agent, which remains responsible for execution and its permission rules.
+On macOS the pet is a native Swift/AppKit app. A Python bridge receives supported agent hook events and exchanges request and response files with the app in a private local directory. Claude's permission decisions also reach an authenticated receiver bound only to `127.0.0.1`. Pip keeps only the call identifiers, decision, and timing needed to remove the matching card; it does not retain the telemetry payload. There is no cloud service or new API key. The companion never executes the command being reviewed; it returns a decision to the originating agent, which remains responsible for execution and its permission rules.
 
 Pip 0.7.2 bundles the original blue robot and twelve additional
 AI-generated characters. Alongside Sunny, Mochi, Boba, Lumi, Mallow and Sprout,
@@ -21,7 +36,7 @@ eye blinks and attention badge. The installed app
 icon keeps the original Pip artwork. See [ASSETS.md](ASSETS.md) for provenance and
 rendering details.
 
-Pip is a private macOS beta. Version **0.7.2 / build 46** adds request handoff
+Pip is a private beta: a native macOS app and a source-run Windows alpha. Version **0.7.2 / build 46** adds request handoff
 after successful session-header navigation. It retains the six fluffy
 characters above, with thirteen gallery choices including **Default Pip**, state
 previews, a saved selection and **Reset to default**. Click anywhere in a gallery
@@ -71,6 +86,19 @@ additional characters, Claude question forms and the pending-request queue.
 Developers can clone this repository and run it with Node.js 24 and Yarn 1.22.22.
 It does not require Python or Xcode, and this workflow does not build or publish a
 Pip Windows installer or executable.
+
+To run it, use native PowerShell on Windows (or Terminal on macOS). You need Git,
+Node.js 24 and Yarn 1.22.22:
+
+```powershell
+git clone https://github.com/manishmalik23/ai-companion.git
+cd ai-companion/cross-platform
+yarn install --frozen-lockfile
+yarn start
+```
+
+Connecting Claude Code or Codex, the optional VS Code session-links helper and the
+remaining platform checks are covered in the [source guide](cross-platform/README.md).
 
 Source version **0.7.2-alpha.3** adds the same session-header handoff behavior.
 It retains thirteen character choices and bounded recovery from transient

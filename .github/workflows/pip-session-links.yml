@@ -1,0 +1,130 @@
+name: Verify Pip session links
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'vscode-session-links/**'
+      - 'cross-platform/**'
+      - 'desktop/Resources/Characters/**'
+      - 'desktop/Appearance.swift'
+      - 'desktop/CreatureCharacters.swift'
+      - 'desktop/RobotArt.swift'
+      - 'design/characters/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'build.sh'
+      - '.github/workflows/pip-session-links.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, Node 24
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, Node 24
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          yarn --version
+      - name: Helper dependencies
+        working-directory: vscode-session-links
+        run: yarn install --frozen-lockfile
+      # Initialize the CI host; functional ACL calls retain their strict 5s bound.
+      - name: Warm Windows PowerShell ACL runtime
+        if: runner.os == 'Windows'
+        shell: pwsh
+        timeout-minutes: 1
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $executable = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+          $command = @'
+          $ErrorActionPreference = 'Stop'
+          $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+          try {
+            $null = $identity.User
+            $null = [System.Security.AccessControl.DirectorySecurity]::new()
+            $null = [System.IO.Directory]::GetAccessControl($env:PIP_CI_POWERSHELL_WARMUP_DIRECTORY)
+            $null = @{ ready = $true } | ConvertTo-Json -Compress
+          } finally { $identity.Dispose() }
+          '@
+          $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+          $startInfo.FileName = $executable
+          $startInfo.UseShellExecute = $false
+          $startInfo.CreateNoWindow = $true
+          $startInfo.RedirectStandardOutput = $true
+          $startInfo.RedirectStandardError = $true
+          $startInfo.Environment['PSModulePath'] = Join-Path (Split-Path $executable) 'Modules'
+          $startInfo.Environment['PIP_CI_POWERSHELL_WARMUP_DIRECTORY'] = $env:RUNNER_TEMP
+          foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-Command', $command)) {
+            [void]$startInfo.ArgumentList.Add($argument)
+          }
+          $process = [System.Diagnostics.Process]::new()
+          $process.StartInfo = $startInfo
+          $started = $false
+          try {
+            $started = $process.Start()
+            if (-not $started) { throw 'Warm-up process did not start.' }
+            $output = $process.StandardOutput.ReadToEndAsync()
+            $errors = $process.StandardError.ReadToEndAsync()
+            if (-not $process.WaitForExit(30000)) {
+              $process.Kill($true)
+              throw 'Warm-up process timed out.'
+            }
+            $null = $output.GetAwaiter().GetResult()
+            $null = $errors.GetAwaiter().GetResult()
+            if ($process.ExitCode -ne 0) { throw 'Warm-up process failed.' }
+            Write-Output 'Windows PowerShell ACL runtime initialized.'
+          } catch {
+            [Console]::Error.WriteLine('Windows PowerShell ACL runtime initialization failed.')
+            exit 1
+          } finally {
+            if ($started -and -not $process.HasExited) {
+              try { $process.Kill($true) } catch { }
+            }
+            $process.Dispose()
+          }
+      - name: Helper checks (includes native Windows ACL fixture)
+        working-directory: vscode-session-links
+        run: yarn test
+      - name: Package extension
+        working-directory: vscode-session-links
+        run: yarn package
+      - name: App dependencies
+        working-directory: cross-platform
+        run: yarn install --frozen-lockfile
+      - name: App checks
+        working-directory: cross-platform
+        run: yarn test
+      - name: Native Mac checks
+        if: runner.os == 'macOS'
+        working-directory: .
+        run: ./scripts/check.sh
+      - name: Verify fluffy asset layout metadata
+        if: runner.os == 'macOS'
+        working-directory: .
+        run: |
+          swift -O -module-cache-path .build/module-cache design/characters/measure_fluffy_layouts.swift --output .build/FluffyLayouts.checked.json
+          cmp desktop/Resources/Characters/FluffyLayouts.json .build/FluffyLayouts.checked.json
+      - name: Repeat Windows receiver checks
+        if: runner.os == 'Windows'
+        working-directory: cross-platform
+        shell: pwsh
+        run: |
+          foreach ($attempt in 1..5) {
+            node --test dist/tests/telemetry.test.js
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
